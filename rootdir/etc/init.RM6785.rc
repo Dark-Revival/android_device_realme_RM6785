@@ -1,0 +1,59 @@
+on init
+    # Update fastcharge firmware
+    write /proc/fastchg_fw_update 1
+
+on fs
+    mount_all /vendor/etc/fstab.mt6785 --early
+    mount_all /vendor/etc/fstab.mt6785 --late
+
+    # Update touchpanel firmware in case we ship newer firmware in /odm
+    write /proc/touchpanel/tp_fw_update 0
+
+on post-fs-data
+    # VideoCodec
+    chmod 0666 /dev/video0
+    chmod 0666 /dev/video1
+
+    # Services
+    setprop init.svc.console stopped
+
+    # AudioDump
+    mkdir /data/vendor/audiohal 0771 system audio
+    mkdir /data/vendor/audiohal/audio_param 0771 system audio
+
+on property:sys.boot_completed=1
+    # ZRAM
+    swapon_all /vendor/etc/fstab.mt6785
+
+    # Disable edge limit control interface
+    write /proc/touchpanel/oplus_tp_limit_enable 0
+
+    # Enable oppo touchpanel direction
+    write /proc/touchpanel/oplus_tp_direction 1
+
+    # OTG
+    write /sys/class/power_supply/usb/otg_switch 1
+
+on property:persist.vendor.radio.port_index=""
+    setprop sys.usb.config adb
+
+service vendor.media.omx /vendor/bin/hw/android.hardware.media.omx@1.0-service
+    override
+    class main
+    user mediacodec
+    group camera drmrpc mediadrm system
+    ioprio rt 4
+    writepid /dev/cpuset/foreground/tasks
+
+on property:ro.vendor.nfc_device=1
+    setprop ro.boot.product.hardware.sku nfc
+
+on property:ro.boot.product.hardware.sku=nfc
+    start vendor.nfc_hal_service
+
+service vendor.nfc_hal_service /vendor/bin/hw/android.hardware.nfc@1.2-service
+    override
+    disabled
+    class hal
+    user nfc
+    group nfc
