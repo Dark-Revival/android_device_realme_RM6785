@@ -170,9 +170,9 @@
     <!-- The restoring is handled by modem if it is true-->
     <bool name="skip_restoring_network_selection">true</bool>
 
-     <!-- Does the notification LED support multiple colors-Used to decide if the user can change the colors -->
-    <bool name="config_multiColorBatteryLed">false</bool>
-
+    <!-- Does the device have a notification led -->
+    <bool name="config_hasNotificationLed">false</bool>
+     
     <!-- Default list of files pinned by the Pinner Service -->
     <string-array translatable="false" name="config_defaultPinnerServiceFiles">
         <item>"/system/framework/framework.jar"</item>
