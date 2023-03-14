@@ -5,4 +5,4 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/bliss_RM6785.mk
+    $(LOCAL_DIR)/aosp_RM6785.mk
