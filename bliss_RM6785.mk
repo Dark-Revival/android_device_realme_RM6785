@@ -16,7 +16,7 @@ $(call inherit-product, device/realme/RM6785/device.mk)
 $(call inherit-product, vendor/bliss/config/common_full_phone.mk)
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := aosp_RM6785
+PRODUCT_NAME := bliss_RM6785
 PRODUCT_DEVICE := RM6785
 PRODUCT_BRAND := realme
 PRODUCT_MODEL := RM6785
